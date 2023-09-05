@@ -13,7 +13,7 @@ struct Diary: Codable, Identifiable {
     var title: String
     var date: String
     var entry: String
-    var isAnalysed: Bool = true
+    var isAnalysed: Bool = false
     var analysis: [Emotion]
 }
 

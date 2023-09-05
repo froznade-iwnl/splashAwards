@@ -99,6 +99,14 @@ struct HomeScreen: View {
                 .sheet(isPresented: $sheetShowed) {
                     NewDiaryView(diary: $diaries.Diaries)
                 }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Reset") {
+                            diaries.Diaries = []
+                            
+                        }
+                    }
+                }
             }
         }
     }

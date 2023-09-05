@@ -46,41 +46,35 @@ struct DiaryView: View {
             VStack {
                 Spacer()
                 
-                HStack {
-                    Button {
+                
+                Button {
+                    
+                    if(diary.isAnalysed){
+                        //diary doesn't need to be analysed
+                        print("OK!")
+                    }else{
+                        //diary need to be analysed
                         fetchData(query: diary.entry)
                         while(emotionList.isEmpty){
                             print("Queueing")
                         }
                         diary.analysis = emotionList
                         diary.isAnalysed = true
-                    
-                        isPresented = true
-                    } label: {
-                        Text("Analyze Diary")
-                            .padding(20)
-                            .foregroundColor(.white)
-                            .frame(height: 50)
-                            .background(.green)
-                            .cornerRadius(12)
                     }
-                    
-                    Button {
-//                        diary.analysis = emotionList
-                        print(diary.analysis)
-                        print(emotionList)
-                        moveToAnalysis = true
-                    } label: {
-                        Text("Check Analysis")
-                            .padding(20)
-                            .foregroundColor(.white)
-                            .frame(height: 50)
-                            .background(.green)
-                            .cornerRadius(12)
-                    }
+                    emotionList = []
                     
                     
+                    //Trigger alert
+                    isPresented = true
+                } label: {
+                    Text("Analyze Diary")
+                        .padding(20)
+                        .foregroundColor(.white)
+                        .frame(height: 50)
+                        .background(.green)
+                        .cornerRadius(12)
                 }
+                
                 
                 NavigationLink(destination: EmotionAnalysisView(diary: $diary), isActive: $moveToAnalysis) {
                     Text("")
@@ -92,7 +86,9 @@ struct DiaryView: View {
         .alert(isPresented: $isPresented) {
             Alert(title: Text("Alert"),
                   message: Text("You'll be transferred to see the result of the analysis"),
-                  dismissButton: Alert.Button.default(Text("OK"))
+                  dismissButton: Alert.Button.default(Text("OK"), action: {
+                moveToAnalysis = true
+            })
             )
         }
         .sheet(isPresented: $isEdit) {
