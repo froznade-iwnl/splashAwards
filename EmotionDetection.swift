@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct Diary: Identifiable {
+struct Diary: Codable, Identifiable {
     let id = UUID()
     var title: String
     var date: String
@@ -69,4 +69,5 @@ func fetchData(query: String) {
 }
 
 var emotionTop: String = "emotions"
-var emotionList: [Emotion] = [Emotion(label: "Happy", score: 0.1294385287), Emotion(label: "Cringe", score: 0.035862487561)]
+//var emotionList: [Emotion] = [Emotion(label: "Happy", score: 0.1294385287), Emotion(label: "Cringe", score: 0.035862487561)]
+var emotionList: [Emotion] = []

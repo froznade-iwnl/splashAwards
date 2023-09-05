@@ -22,6 +22,7 @@ struct EmotionAnalysisView: View {
                 }
             }
         }
+        .navigationTitle("Emotion Analysis")
     }
 }
 

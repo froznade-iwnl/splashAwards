@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeScreen: View {
     
     @State private var sheetShowed = false
-    @State var diaries: [Diary] = [Diary(title: "Test", date: "12/12/12", entry: "I am Happy", analysis: []), Diary(title: "Test1", date: "12/12/12", entry: "I am Sad", analysis: []), Diary(title: "Test2", date: "12/12/12", entry: "I am Frivolous", analysis: [])]
+    @ObservedObject var diaries: DiaryManager
     
     
     var body: some View {
@@ -49,11 +49,11 @@ struct HomeScreen: View {
                     }
                     .padding(.horizontal, 20)
                     
-                    ForEach($diaries) { $diary in
+                    ForEach($diaries.Diaries) { $diary in
                         NavigationLink {
                             DiaryView(diary: $diary)
                         } label: {
-                            
+
                             VStack {
                                 ZStack {
                                     
@@ -97,7 +97,7 @@ struct HomeScreen: View {
                 }
                 .navigationTitle("Dear Diary!")
                 .sheet(isPresented: $sheetShowed) {
-                    NewDiaryView(diary: $diaries)
+                    NewDiaryView(diary: $diaries.Diaries)
                 }
             }
         }
@@ -108,6 +108,6 @@ struct HomeScreen: View {
 
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
-        HomeScreen()
+        HomeScreen(diaries: DiaryManager())
     }
 }
