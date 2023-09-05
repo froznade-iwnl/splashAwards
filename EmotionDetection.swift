@@ -8,52 +8,65 @@
 import Foundation
 
 
-struct diary {
+struct Diary: Identifiable {
+    let id = UUID()
+    var title: String
+    var date: String
     var entry: String
-    var result: [Substring]
+    var isAnalysed: Bool = true
+    var analysis: [Emotion]
 }
 
-struct emotion: Codable, Identifiable {
+struct Emotion: Codable, Identifiable {
     let id = UUID()
     var label: String
-    var score: Float
+    var score: Double
 }
 
-struct emotionData: Codable, Identifiable {
-    let id = UUID()
-    var hasPart: [emotion]
-}
 
-class EmotionsGrabber: ObservableObject {
+
+// Procedure to fetch data
+let apiUrl = URL(string: "https://api-inference.huggingface.co/models/SamLowe/roberta-base-go_emotions")!
+let headers = ["Authorization": "Bearer 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"]
+
+
+
+func fetchData(query: String) {
+    let payload = ["inputs": query]
+    var request = URLRequest(url: apiUrl)
+    request.httpMethod = "POST"
+    request.allHTTPHeaderFields = headers
+    request.httpBody = try? JSONSerialization.data(withJSONObject: payload, options: [])
     
-    var allEmotions: emotion = emotion(label: "Nil", score: 0.111)
-    @Published var dataset: emotionData?
-    
-    func fetchData(query: String) {
-        guard let url = URL(string: "https://api-inference.huggingface.co/models/SamLowe/roberta-base-go_emotions") else {
+    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            print("Error: \(error)")
             return
         }
         
-        let headers = ["Authorization": "Bearer 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"]
-        let parameters = ["input": query]
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.allHTTPHeaderFields = headers
-        request.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data {
-//                print(response)
-                let decoder = JSONDecoder()
-                DispatchQueue.main.async {
-//                    print(data)
-                    let jsondata = try! decoder.decode([[emotion]].self, from: data)
-                    print(jsondata)
-//                    print(self.last)
+        if let data = data {
+            do {
+                if let json = try? JSONSerialization.jsonObject(with: data, options: []) {
+                    print("JSON Response: \(json)")
+                    // You can access and process the JSON dat further here
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode([[Emotion]].self, from: data)
+                   
+                    emotionList = result.first!
+                    
+                    emotionTop = result.first!.first!.label
+                    
+                } else {
+                    print("Invalid JSON format.")
                 }
+            } catch {
+                print("Error decoding JSON: \(error)")
             }
-        }.resume()
+        }
     }
+    
+    task.resume()
 }
 
+var emotionTop: String = "emotions"
+var emotionList: [Emotion] = [Emotion(label: "Happy", score: 0.1294385287), Emotion(label: "Cringe", score: 0.035862487561)]
