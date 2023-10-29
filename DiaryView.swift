@@ -70,7 +70,7 @@ struct DiaryView: View {
                     //Trigger alert
                     
                 } label: {
-                    Text((diary.isAnalysed) ? "Show Diary🤩" : "Analyze Diary🤔")
+                    Text((diary.isAnalysed) ? "Show Analysis 🤩" : "Analyze Diary🤔")
                         .padding(20)
                         .foregroundColor(.white)
                         .frame(height: 50)
