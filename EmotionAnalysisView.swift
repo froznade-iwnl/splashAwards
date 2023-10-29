@@ -15,7 +15,7 @@ struct EmotionAnalysisView: View {
     var body: some View {
         ScrollView {
             VStack {
-                ForEach(diary.analysis) { emotions in
+                ForEach(diary.analysis.prefix(upTo: (diary.analysis.count >= 5) ? 5 : diary.analysis.count)) { emotions in
                     EmotionView(emotion: emotions.label, value: emotions.score)
                     
                     Divider()

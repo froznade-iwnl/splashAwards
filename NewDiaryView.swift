@@ -13,6 +13,7 @@ struct NewDiaryView: View {
     @State private var title: String = ""
     @State private var isTouched = false
     @State private var date = Date.now
+    @State var diaryAnalysis: [Emotion] = []
     @Binding var diary: [Diary]
     @Environment(\.presentationMode) var presentationMode
     
@@ -38,6 +39,13 @@ struct NewDiaryView: View {
                             isTouched = true
                         }
                     }
+                    .frame(minWidth: 200,
+                           idealWidth: 250,
+                           maxWidth: 400,
+                           minHeight: 300,
+                           idealHeight: 325,
+                           maxHeight: .infinity,
+                           alignment: .center)
                     
             }
             
@@ -46,12 +54,28 @@ struct NewDiaryView: View {
 //                print(birthDate.formatted(date: .numeric, time: .omitted))
 //            }
             
-            Section("Save") {
+            Section("") {
                 Button {
-                    diary.insert(Diary(title: title, date: date.formatted(date: .numeric, time: .omitted), entry: entry, analysis: []), at: 0)
+                    
+                    fetchData(query: entry)
+                    while(emotionList.isEmpty){
+                        print("Queueing")
+                    }
+                    diaryAnalysis = emotionList
+                    
+                    
+                    diary.insert(Diary(title: title, date: date.formatted(date: .numeric, time: .omitted), entry: entry, isAnalysed: true, analysis: diaryAnalysis), at: 0)
+                    
+                    emotionList = []
+                    
                     presentationMode.wrappedValue.dismiss()
+                    
                 } label: {
-                    Text("Click me")
+                    HStack {
+                        Spacer()
+                        Text("Save Diary")
+                        Spacer()
+                    }
                 }
 
             }

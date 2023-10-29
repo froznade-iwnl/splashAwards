@@ -11,6 +11,11 @@ struct ContentView: View {
                 .tabItem {
                     Label("Diary", systemImage: "book")
                 }
+            
+            ChatbotView()
+                .tabItem {
+                    Label("Chatbot", systemImage: "quote.bubble")
+                }
         }
         
     }

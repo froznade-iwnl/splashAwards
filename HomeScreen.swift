@@ -18,8 +18,16 @@ struct HomeScreen: View {
             ScrollView {
                 VStack {
                     
+                    HStack {
+                        Text("How are you feeling today?")
+                            .font(.title2)
+                            .bold()
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal, 17)
                     //Create new Diary
-
+                    
                     Button {
                         sheetShowed = true
                     } label: {
@@ -31,7 +39,7 @@ struct HomeScreen: View {
                             Text("Write a Diary")
                                 .font(.largeTitle)
                                 .foregroundColor(.white)
-                                .opacity(0.2)
+                                .opacity(0.4)
                             
                             Image(systemName: "plus")
                                 .foregroundColor(.white)
@@ -45,49 +53,73 @@ struct HomeScreen: View {
                         Text("My Diary")
                             .font(.title)
                             .bold()
-                         Spacer()
+                        Spacer()
                     }
                     .padding(.horizontal, 20)
                     
-                    ForEach($diaries.Diaries) { $diary in
-                        NavigationLink {
-                            DiaryView(diary: $diary)
-                        } label: {
-
-                            VStack {
-                                ZStack {
-                                    
-                                    Rectangle()
-                                        .frame(height: 100)
-                                        .cornerRadius(12)
-                                        .padding(.horizontal, 20)
-                                       
-                                    
-                                    
-                                    HStack {
-                                        VStack(alignment: .leading) {
-                                            Text(diary.date)
-                                                .font(.headline)
-                                            
-                                            
-                                            Spacer()
-                                            
-                                            Text(diary.title)
-                                                .font(.title)
-                                        }
-                                        .foregroundColor(.white)
-                                        .padding(20)
-                                        
-                                        Spacer()
+                    if(diaries.Diaries.isEmpty){
                         
-                                        Image(systemName: "chevron.right")
+                        ZStack {
+                            
+                            Rectangle()
+                                .frame(height: 100)
+                                .cornerRadius(12)
+                                .padding(.horizontal, 20)
+                                .foregroundColor(.gray)
+                               
+                            
+                            VStack {
+                                
+                                Text("Create your first diary!")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                                    .opacity(0.5)
+                                
+                            
+                            }
+
+                        }
+                    } else {
+                        ForEach($diaries.Diaries) { $diary in
+                            NavigationLink {
+                                DiaryView(diary: $diary)
+                            } label: {
+
+                                VStack {
+                                    ZStack {
+                                        
+                                        Rectangle()
+                                            .frame(height: 100)
+                                            .cornerRadius(12)
+                                            .padding(.horizontal, 20)
+                                           
+                                        
+                                        
+                                        HStack {
+                                            VStack(alignment: .leading) {
+                                                Text(diary.date)
+                                                    .font(.headline)
+                                                
+                                                
+                                                Spacer()
+                                                
+                                                Text(diary.title)
+                                                    .font(.title)
+                                            }
                                             .foregroundColor(.white)
                                             .padding(20)
-                                        
+                                            
+                                            Spacer()
+                            
+                                            Image(systemName: "chevron.right")
+                                                .foregroundColor(.white)
+                                                .padding(20)
+                                            
+                                        }
+                                        .padding(.horizontal, 20)
                                     }
-                                    .padding(.horizontal, 20)
-                                }
 
+                                }
                             }
                         }
                     }
@@ -95,7 +127,7 @@ struct HomeScreen: View {
                     Spacer()
 
                 }
-                .navigationTitle("Dear Diary!")
+                .navigationTitle("Hello!")
                 .sheet(isPresented: $sheetShowed) {
                     NewDiaryView(diary: $diaries.Diaries)
                 }

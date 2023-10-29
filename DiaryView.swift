@@ -52,6 +52,7 @@ struct DiaryView: View {
                     if(diary.isAnalysed){
                         //diary doesn't need to be analysed
                         print("OK!")
+                        moveToAnalysis = true
                     }else{
                         //diary need to be analysed
                         fetchData(query: diary.entry)
@@ -60,14 +61,16 @@ struct DiaryView: View {
                         }
                         diary.analysis = emotionList
                         diary.isAnalysed = true
+                        emotionList = []
+                        isPresented = true
                     }
-                    emotionList = []
+                    
                     
                     
                     //Trigger alert
-                    isPresented = true
+                    
                 } label: {
-                    Text("Analyze Diary")
+                    Text((diary.isAnalysed) ? "Show Diary🤩" : "Analyze Diary🤔")
                         .padding(20)
                         .foregroundColor(.white)
                         .frame(height: 50)
@@ -84,8 +87,8 @@ struct DiaryView: View {
             .padding(20)
         }
         .alert(isPresented: $isPresented) {
-            Alert(title: Text("Alert"),
-                  message: Text("You'll be transferred to see the result of the analysis"),
+            Alert(title: Text("Success🥳"),
+                  message: Text("You'll be transferred to see the result of the analysis🥰"),
                   dismissButton: Alert.Button.default(Text("OK"), action: {
                 moveToAnalysis = true
             })
